@@ -1,0 +1,21 @@
+importFrom(utils,packageVersion)
+importFrom("GIGrvg","rgig")
+importFrom("stabledist","dstable")
+importFrom("stats", "var", "rexp", "pgamma", "runif", "mahalanobis", "pnorm", "dnorm", "rlnorm", "D")
+importFrom("stats", "rnorm", "na.omit", "qnorm", "rmultinom", "rchisq", "rf", "rgamma", "rweibull", "rbinom")
+export(arrange_lambda,
+     arrange_sigma,
+	   configuration1,
+	   configuration2,
+     dmix,
+	   dpstable,
+	   dptstable,
+	   estep1,
+	   estep2,
+	   ofim1,
+	   ofim2,
+	   rigaussian,
+	   rmix,
+	   rmvnorm,
+	   rptstable,
+	   sefm)
