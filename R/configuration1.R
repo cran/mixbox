@@ -1,4 +1,4 @@
-configuration1 <- function(Y, G, weight, mu, sigma, lambda, family, skewness, param, theta, ofim1, level)
+configuration1 <- function(Y, G, weight, mu, sigma, lambda, family, skewness, param, theta, ofim1_solve, sigma_arrange1, level)
 {
   Dim <- length( mu[[1]] )
   Dim_sigma  <- Dim*(Dim + 1)/2
@@ -14,7 +14,7 @@ configuration1 <- function(Y, G, weight, mu, sigma, lambda, family, skewness, pa
   out_Sigma  <- vector("list", G)
   out_Lambda <- vector("list", G)
   out_Theta  <- vector("list", G)
-  squre_root_FI <- sqrt( diag( solve( ofim1$Fisher ) ) )
+  squre_root_FI <- sqrt( abs( diag( abs( ofim1_solve ) ) ) )# sqrt( diag( solve( ofim1$Fisher ) ) )
   for( g in 1:(G - 1) )
   {
     out_weight[g, ] <- cbind( weight[g], squre_root_FI[g], weight[g] - squre_root_FI[g]*Z_alpha2, weight[g] + squre_root_FI[g]*Z_alpha2 )
@@ -32,7 +32,8 @@ configuration1 <- function(Y, G, weight, mu, sigma, lambda, family, skewness, pa
                              mu[[g]][d] + squre_root_FI[ range_mu ][d]*Z_alpha2
       )
     }
-    seq_Dim_sigma <- rep(NA, Dim_sigma); index <- 1;
+    seq_Dim_sigma <- rep(NA, Dim_sigma)
+    index <- 1
     for(i in 1:Dim)
     {
       for(j in i:Dim)
@@ -43,7 +44,7 @@ configuration1 <- function(Y, G, weight, mu, sigma, lambda, family, skewness, pa
     }
     for(d in 1:Dim_sigma)
     {
-      index <- ofim1$index_sigma[d, ]
+      index <- sigma_arrange1[d, ]# ofim1$index_sigma[d, ]
       out_sigma[d, ] <- cbind( sigma[[g]][ index[1], index[2] ],  squre_root_FI[ range_sigma ][d],
                                sigma[[g]][ index[1], index[2] ] - squre_root_FI[ range_sigma ][d]*Z_alpha2,
                                sigma[[g]][ index[1], index[2] ] + squre_root_FI[ range_sigma ][d]*Z_alpha2

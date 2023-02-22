@@ -1,13 +1,13 @@
-ofim2 <- function(Y, G, weight, model, mu, sigma, lambda, family = "constant", skewness = "FALSE", param = NULL, theta = NULL, tick = rep(1, 2), h = 0.001, N = 3000, level = 0.05, PDF = NULL)
+ofim2 <- function(Y, G, weight, model, mu, sigma, lambda, family = "constant", skewness = "FALSE", param = NULL, theta = NULL, tick = NULL, h = 0.001, N = 3000, level = 0.05, PDF = NULL)
 {
   n   <- length( Y[, 1] )
   Dim <- length( mu[[1]] )
-  Q   <- length( lambda[[1]][1,] )
+  Q   <- length( lambda[[1]][1, ] )
   Dim_sigma  <- Dim*(Dim + 1)/2
   Dim_lambda <- Dim*Q
   if( family == "constant" )
   {
-    Dim_theta <- 1
+    Dim_theta <- 0
   }else{
     Dim_theta <- length( theta[[1]] )
   }
@@ -17,25 +17,24 @@ ofim2 <- function(Y, G, weight, model, mu, sigma, lambda, family = "constant", s
   }else{
     Dim_lambda <- Dim
   }
-  S <- rep( 0, G - 1 + G*( Dim + Dim_lambda + Dim_sigma + Dim_theta ) )
   if( family != "constant" & skewness ==  "TRUE" ) S <- rep( 0, G - 1 + G*( Dim + Dim_lambda + Dim_sigma +   Dim_theta ) )
-  if( family == "constant" & skewness == "FALSE" ) S <- rep( 0, G - 1 + G*( Dim +          0 + Dim_sigma +           0 ) )
   if( family != "constant" & skewness == "FALSE" ) S <- rep( 0, G - 1 + G*( Dim +          0 + Dim_sigma +   Dim_theta ) )
+  if( family == "constant" & skewness == "FALSE" ) S <- rep( 0, G - 1 + G*( Dim +          0 + Dim_sigma +           0 ) )
   if( family == "constant" & skewness ==  "TRUE" ) S <- rep( 0, G - 1 + G*( Dim + Dim_lambda + Dim_sigma +           0 ) )
   z_alpha2 <- qnorm(1 - level/2)
   Fisher   <- matrix( 0, nrow = length(S), ncol = length(S) )
   Sigmainverse  <- array( NA, c(Dim, Dim, G) )
   E_H1_Wg 	    <- array( 0, c(n, 2, G) )
   E_deriv_theta <- array( 0, c(n, Dim_theta, G) )
-  E_Zig <- E_H1_W0 <- matrix( 0, nrow = n, ncol = G )
+  tau_ig <- E_W1 <- matrix( 0, nrow = n, ncol = G )
   estep <- estep2(Y = Y, G = G, weight = weight, mu = mu, sigma = sigma, lambda = lambda, family = family, skewness = skewness,
                  param = param, theta = theta, tick = tick, h = h, N = N, PDF = PDF)
-  E_Zig   <- estep$E_Zig
-  E_H1_W0 <- estep$E_H1_W0
-  E_H1_T  <- estep$E_H1_T
-  E_H1_TT <- estep$E_H1_TT
+  tau_ig  <- estep$tau_ig
+  E_W1    <- estep$E_W1
+  E_W1_T  <- estep$E_W1_T
+  E_W1_TT <- estep$E_W1_TT
   E_deriv_theta <- estep$E_deriv_theta
-  for(m in 1:G) Sigmainverse[, , m] <- solve( sigma[[m]] )
+  for(g in 1:G) Sigmainverse[, , g] <- solve( sigma[[g]] )
   for(g in 1:G)
   {
     if(model == "canonical")
@@ -55,11 +54,11 @@ ofim2 <- function(Y, G, weight, model, mu, sigma, lambda, family = "constant", s
     Lambda   <- as.matrix( lambda[[g]] )
     for(i in 1:n)
     {
-      S1 <- E_H1_W0[i, g]*( c(Y[i, ] - Mu)%o%c(Y[i, ] - Mu) ) + Lambda%*%matrix( E_H1_TT[i, , g], nrow = Q, ncol = Q )%*%t(Lambda) -
-            Lambda%*%E_H1_T[i, , g]%*%c(Y[i, ] - Mu)  - c(Y[i, ] - Mu)%*%t(E_H1_T[i, , g])%*%t(Lambda)
-      S6 <- Sigmainv%*%( E_H1_W0[i,  g]*c(Y[i, ] - Mu)  - Lambda%*%E_H1_T[i, , g]                               )
-      S7 <- Sigmainv%*%(c(Y[i, ] - Mu)%o%E_H1_T[i, , g]  - Lambda%*%matrix(E_H1_TT[i, , g], nrow = Q, ncol = Q ) )
-      out_sigma <- arrange_sigma( 1/2*( -E_Zig[i, g]*Sigmainv + Sigmainv%*%matrix( S1, nrow = Dim, ncol = Dim )%*%Sigmainv ) )
+      S1 <- E_W1[i, g]*( c(Y[i, ] - Mu)%o%c(Y[i, ] - Mu) ) + Lambda%*%matrix( E_W1_TT[i, , g], nrow = Q, ncol = Q )%*%t(Lambda) -
+            Lambda%*%E_W1_T[i, , g]%*%c(Y[i, ] - Mu) - c(Y[i, ] - Mu)%*%t(E_W1_T[i, , g])%*%t(Lambda)
+      S6 <- Sigmainv%*%( E_W1[i, g]*c(Y[i, ] - Mu) - Lambda%*%E_W1_T[i, , g]                               )
+      S7 <- Sigmainv%*%( c(Y[i, ] - Mu)%o%E_W1_T[i, , g]  - Lambda%*%matrix( E_W1_TT[i, , g], nrow = Q, ncol = Q ) )
+      out_sigma <- arrange_sigma( 1/2*( -tau_ig[i, g]*Sigmainv + Sigmainv%*%matrix( S1, nrow = Dim, ncol = Dim )%*%Sigmainv ) )
       S[ range_sigma ] <- out_sigma$y                             # S_Sigma
       if( family != "constant" & skewness == "TRUE" )
       {
@@ -88,12 +87,21 @@ ofim2 <- function(Y, G, weight, model, mu, sigma, lambda, family = "constant", s
         }
       }
       if( family == "constant" & skewness == "FALSE" ) S <- S[ seq( 1 : ( G - 1 + G*Dim + G*Dim_sigma ) ) ]
-      if(g < G ) S[ g ] <- E_Zig[i, g]/weight[[g]] - E_Zig[i, G]/weight[[G]] # S_weight
+      if(g < G ) S[ g ] <- tau_ig[i, g]/weight[[g]] - tau_ig[i, G]/weight[[G]] # S_weight
       S[ range_mu ] <- as.vector( S6 )                            # S_Mu
+
       Fisher <- Fisher + S%o%S
     }
   }
-  return( list ( Fisher = Fisher, index_sigma = out_sigma$index ) )
+  if(model == "canonical")
+  {
+  Name <- ofim_name(G, weight, Dim, lambda, model = "canonical" , family, skewness, param)
+  }else{
+  Name <- ofim_name(G, weight, Dim, lambda, model = "restricted", family, skewness, param)
+  }
+  colnames( Fisher ) <- Name
+  rownames( Fisher ) <- Name
+  return( list ( OFI = Fisher, index_sigma = out_sigma$index ) )
 }
 
 

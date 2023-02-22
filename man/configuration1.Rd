@@ -3,7 +3,7 @@
 \title{Output configuration.}
 \description{Output design for standard error of the standard error for parameters of the finite mixture models. }
 \usage{configuration1(Y, G, weight, mu, sigma, lambda, family, skewness, param, theta,
-ofim1, level)}
+ ofim1_solve, sigma_arrange1, level)}
 \arguments{
 \item{Y}{an \eqn{n \times d} matrix of observations. }
 \item{G}{the number of components. }
@@ -15,7 +15,8 @@ ofim1, level)}
 \item{skewness}{logical statement. By default \code{skewness = "TRUE"} which means that a skewed model is fitted to each component (cluster). If \code{skewness = "FALSE"}, then a symmetric model is fitted to each component. }
 \item{param}{name of the elements of \eqn{\bold{\theta}} as the parameter vector of mixing distribution with density function \eqn{f_W(w; \bold{\theta})}. }
 \item{theta}{a list of maximum likelihood estimator for \eqn{\bold{\theta}} across \code{G} components. }
-\item{ofim1}{the observed Fisher information matrix corresponds to the restricted model. }
+\item{ofim1_solve}{inverse of the observed Fisher information matrix corresponds to the restricted model. }
+\item{sigma_arrange1}{orders of the lower triangular elements of the dispersion matrix \eqn{\Sigma}. }
 \item{level}{significance level \eqn{\alpha} for constructing \eqn{100(1-\alpha)\%} confidence interval. By default \eqn{\alpha = 0.05}. }
 }
 \value{ designated form for output of parameters and their standard errors. }
@@ -23,7 +24,7 @@ ofim1, level)}
 \author{Mahdi Teimouri}
 \examples{
 \donttest{
-      n <- 2000
+      n <- 200
       G <- 2
  weight <- rep( 0.5, 2 )
     mu1 <- rep(-5  , 2 )
@@ -45,7 +46,8 @@ lambda2 <- c( 5,  5 )
   ofim  <- ofim1(Y[, 1:2], G, weight, mu, sigma, lambda, family = "igamma",
   skewness = "TRUE", param, theta, tick, h = 0.001, N = 3000, level = 0.05, PDF)
 configuration1(Y[, 1:2], G, weight = weight, mu, sigma, lambda, family = "igamma",
-skewness = "TRUE", param, theta, ofim1 = ofim, level = 0.05)
+skewness = "TRUE", param, theta, ofim1_solve = ofim$Fisher,
+sigma_arrange1 = ofim$index_sigma, level = 0.05)
 }
 }
 \keyword{internal}

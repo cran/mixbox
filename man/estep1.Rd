@@ -19,19 +19,23 @@ The required posteriors expectations are \eqn{E\bigl(W^{-1}|\bold{y},\bold{\Psi}
 \item{mu}{a list of location vectors of \code{G} components. }
 \item{sigma}{a list of dispersion matrices of \code{G} components. }
 \item{lambda}{a list of skewness vectors of \code{G} components. }
-\item{family}{name of the mixing distribution. By default \code{family = "constant"} that corresponds to the finite mixture of multivariate normal (or skew normal) distribution. Other candidates for family name are: "bs" (for Birnbaum-Saunders), "burrii" (for Burr type ii), "chisq" (for chi-square), "exp" (for exponential), "f" (for Fisher), "gamma" (for gamma), "gig" (for generalized inverse-Gaussian), "igamma" (for inverse-gamma), "igaussian" (for inverse-Gaussian), "lindley" (for Lindley), "loglog" (for log-logistic), "lognorm" (for log-normal), "lomax" (for Lomax), "ptstable" (for positive \eqn{\alpha}-stable), "ptstable" (for polynomially tilted \eqn{\alpha}-stable), "rayleigh" (for Rayleigh), and "weibull" (for Weibull). }
-\item{skewness}{logical statement. If \code{skewness = "FALSE"} a symmetric model is fitted to each component. If \code{skewness = "TRUE"}, then a a skewed model is fitted to each component.}
+\item{family}{name of the mixing distribution. By default \code{family = "constant"} that corresponds to the finite mixture of multivariate normal (or skew normal) distribution. Other candidates for family name are: "bs" (for Birnbaum-Saunders), "burriii" (for Burr type iii), "chisq" (for chi-square), "exp" (for exponential), "f" (for Fisher), "gamma" (for gamma), "gig" (for generalized inverse-Gaussian), "igamma" (for inverse-gamma), "igaussian" (for inverse-Gaussian), "lindley" (for Lindley), "loglog" (for log-logistic), "lognorm" (for log-normal), "lomax" (for Lomax), "ptstable" (for positive \eqn{\alpha}-stable), "ptstable" (for polynomially tilted \eqn{\alpha}-stable), "rayleigh" (for Rayleigh), and "weibull" (for Weibull). }
+\item{skewness}{a logical statement. By default \code{skewness = "FALSE"} which means that a symmetric model is fitted to each component (cluster). If \code{skewness = "FALSE"}, then a skewed model is fitted to each component. }
 \item{param}{name of the elements of \eqn{{\bold{\theta)}}} as the parameter vector of mixing distribution with density function \eqn{f_W(w|{\bold{\theta)}}}. }
 \item{theta}{a list of maximum likelihood estimator for \eqn{{\bold{\theta)}}} across \code{G} components. }
 \item{tick}{ a binary vector whose length depends on type of family. The elements of \code{tick} are either \code{0} or \code{1}. If element of \code{tick} is \code{0}, then the correspoding element of \eqn{\bold{\theta}} is not considered in the formula of \eqn{f_W(w|{\bold{\theta)}}} for computing the required posterior expectations. If element of \code{tick} is \code{1}, then the corresponding element of \eqn{\bold{\theta}} is considered in the formula of \eqn{f_W(w|{\bold{\theta)}}}. For instance, if \code{family = "gamma"} and either its shape or rate parameter is one, then \code{tick = c(1)}. This is while, if \code{family = "gamma"} and both of the shape and rate parameters are in the formula of \eqn{f_W(w|{\bold{\theta)}}}, then \code{tick = c(1, 1)}.}
-\item{h}{a positive small value for computing numerical derivative of \eqn{f_W(w| {\bold{\theta)}}} with respect to \eqn{{\bold{\theta)}}}, that is
+\item{h}{a positive small value for computing numerical derivative of \eqn{f_W(w| {\bold{\theta)}})} with respect to \eqn{{\bold{\theta)}}}, that is
 \eqn{\partial/ \partial {\bold{\theta)}} f_W(w| {\bold{\theta)}}}. }
 \item{N}{a large integer number for computing Monte Carlo approximation of expected value within the E-step of the EM algorithm. }
 \item{PDF}{expression for mixing density function \eqn{f_W(w| {\bold{\theta)}}}. }
 }
-
 \value{
-The required posteriors expectations for approximating the observed Fisher information matrix for restricted finite mixture model.
+The required posteriors expectations for approximating the observed Fisher information matrix for restricted finite mixture model. These include
+\eqn{\tau_{ig}=E\bigl( Z_{ig}=1 \vert {\bold{y}}_{i}, \hat{\bold{\Psi}} \bigr) = {\omega}_g f_{\bold{Y}}\bigl({\bold{y}}_{i}\big|{\bold{\Theta}_g}\bigr)/\bigl[ \sum_{g=1}^{G} {{\omega}}_g f_{\bold{Y}}\bigl({\bold{y}}_{i}\big|{\bold{\Theta}_g}\bigr) \bigr]},
+\eqn{E\bigl( W^{-1}\big \vert {\bold{y}}_{i}, \hat{\bold{\Psi}} \bigr)},
+\eqn{E\bigl( {{U}}W^{-1}\big \vert {\bold{y}}_{i}, \hat{\bold{\Psi}} \bigr)},
+\eqn{E\bigl( U^2 W^{-1}\big \vert {\bold{y}}_{i}, \hat{\bold{\Psi}} \bigr)}, and
+\eqn{E\bigl( \partial f_W(w| {\bold{\theta)}})/\partial {\bold{\theta)}} \big \vert {\bold{y}}_{i}, \hat{{\bold{\Psi}}} \bigr)}.
 }
 \references{
 K. E. Basford, D. R. Greenway, G. J. McLachlan, and D. Peel, (1997). Standard errors of fitted means under normal mixture, \emph{Computational Statistics}, 12, 1-17.
@@ -60,10 +64,10 @@ lambda2 <- c(-5,  5 )
 theta10 <- c( 10, 10 )
 theta20 <- c( 20, 20 )
  theta0 <- list( theta10 , theta20 )
-      Y <- rmix( n, G, weight, model = "restricted", mu, sigma, lambda, family = "constant",
+      Y <- rmix( n, G, weight, model = "restricted", mu, sigma, lambda, family = "igamma",
       theta0)
-    estep <- estep1( Y[,1:2], G, weight, mu, sigma, lambda, family = "constant",
-    skewness = "FALSE", param, theta, tick, h = 0.001, N = 3000, PDF)
+    estep <- estep1( Y[, 1:2], G, weight, mu, sigma, lambda, family = "igamma",
+    skewness = "TRUE", param, theta, tick, h = 0.001, N = 3000, PDF)
 }
 }
 \keyword{internal}

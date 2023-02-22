@@ -36,10 +36,10 @@ rmix <- function(n, G, weight, model = "restricted", mu, sigma, lambda, family =
   cn_g <- rep( NA, G )
     Y  <- matrix( NA, nrow = n, ncol = Dim )
   Z1   <- matrix( NA, nrow = n, ncol = Dim )
-  sim <- rmultinom(n, 1, weight)
+  sim  <- rmultinom(n, 1, weight)
   n_g  <- apply( sim, 1, sum )
   label <- rep( seq(1, G), n_g )
-  cn_g <- cumsum( n_g )
+  cn_g  <- cumsum( n_g )
   for(g in 1:G)
   {
     if( family == "constant")
@@ -130,11 +130,11 @@ rmix <- function(n, G, weight, model = "restricted", mu, sigma, lambda, family =
     Lambda <- as.matrix( lambda[[g]] )
     if ( any( model == c("canonical", "unrestricted") ) )
     {
-      Z0  <- matrix( qnorm( ( runif(n_g[g]*Q) + 1 )/2 ), nrow = n_g[g], ncol = Q, byrow = TRUE )
-      Y[ ( 1 + sign( g - 1 )*cn_g[ g - sign(g - 1) ] ):cn_g[g], ] <- t( Mu + sapply(1:n_g[g], function(i) sqrt( W[i] )*( Lambda%*%Z0[i, ] + Z1[i, ] ) ) )
+      Z0  <- matrix( qnorm( ( runif(n_g[g]*Q) + 1 )/2 ), nrow = n_g[g], ncol = Q )
+      Y[ ( 1 + sign( g - 1 )*cn_g[ g - sign(g - 1) ] ):cn_g[g], ] <- t( sapply(1:n_g[g], function(i) {Mu + sqrt( W[i] )*( Lambda%*%Z0[i, ] + Z1[i, ] )} ) )
     }else{
       Z0  <- qnorm( ( runif(n_g[g]) + 1 )/2 )
-      Y[ ( 1 + sign(g - 1)*cn_g[ g - sign(g - 1) ] ):cn_g[g], ] <- t( Mu + sapply(1:n_g[g], function(i) sqrt(W[i])*( Lambda*Z0[i] + Z1[i, ] ) ) )
+      Y[ ( 1 + sign(g - 1)*cn_g[ g - sign(g - 1) ] ):cn_g[g], ] <- t( sapply(1:n_g[g], function(i) {Mu + sqrt( W[i] )*( Lambda*Z0[i] + Z1[i, ] )} ) )
     }
   }
   out <- cbind( Y, label )

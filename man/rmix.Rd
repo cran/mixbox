@@ -15,9 +15,9 @@ where \eqn{ {\bold{\mu}}_{g} \in {R}^{d} } is location vector, \eqn{ {\bold{\lam
         theta = NULL) }
 \arguments{
 \item{n}{number of realizations. }
-\item{G}{number of components. } model = "restricted"
+\item{G}{number of components. }
 \item{weight}{a vector of weight parameters (or mixing proportions). }
-\item{model}{one of epresssions \code{"canonical"}, \code{"restricted"}, and \code{"unrestricted"}, By default \code{model="restricted"}. }
+\item{model}{It must be \code{"canonical"}, \code{"restricted"}, or \code{"unrestricted"}. By default \code{model="restricted"}. }
 \item{mu}{a list of location vectors of \code{G} components. }
 \item{sigma}{a list of dispersion matrices of \code{G} components. }
 \item{lambda}{a list of skewness vectors of \code{G} components. If mixture model is symmetric, then a vector of zeros of appropriate size should be considered for the skewness vector of the corresponding component.}
@@ -28,23 +28,21 @@ where \eqn{ {\bold{\mu}}_{g} \in {R}^{d} } is location vector, \eqn{ {\bold{\lam
 \value{a matrix with \eqn{n} rows and \eqn{d + 1} columns. The first \eqn{d} columns constitute \eqn{n} realizations from random vector \eqn{\bold{Y}=(Y_1,\cdots,Y_d)^{T}} and the last column is the label of realization \eqn{\bold{Y}_i} ( for \eqn{ i = 1, \cdots n} ) indicating the component that \eqn{\bold{Y}_i} is coming from.}
 \author{Mahdi Teimouri}
 \examples{
-%\donttest{
-      n <- 100
-      G <- 2
+\donttest{
  weight <- rep( 0.5, 2 )
     mu1 <- rep(-5  , 2 )
     mu2 <- rep( 5  , 2 )
- sigma1 <- matrix( c( 0.4, -0.20, -0.20, 0.5 ), nrow = 2, ncol = 2 )
- sigma2 <- matrix( c( 0.5,  0.20,  0.20, 0.4 ), nrow = 2, ncol = 2 )
-lambda1 <- c( 5, -5 )
-lambda2 <- c(-5,  5 )
- theta1 <- c( 10, 12 )
- theta2 <- c( 10, 20 )
+ sigma1 <- matrix( c( 0.4, -0.20, -0.20, 0.4 ), nrow = 2, ncol = 2 )
+ sigma2 <- matrix( c( 0.4,  0.10,  0.10, 0.4 ), nrow = 2, ncol = 2 )
+lambda1 <- matrix( c( -4, -2,  2,  5 ), nrow = 2, ncol = 2 )
+lambda2 <- matrix( c(  4,  2, -2, -5 ), nrow = 2, ncol = 2 )
+ theta1 <- c( 10, 10 )
+ theta2 <- c( 20, 20 )
      mu <- list( mu1, mu2 )
   sigma <- list( sigma1 , sigma2 )
  lambda <- list( lambda1, lambda2)
   theta <- list( theta1 , theta2 )
-      Y <- rmix( n, G, weight, model = "restricted", mu, sigma, lambda, family = "igamma",
-      theta )
-%}
+      Y <- rmix( n = 100, G = 2, weight, model = "canonical", mu, sigma, lambda,
+           family = "igamma", theta )
+}
 }

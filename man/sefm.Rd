@@ -19,24 +19,23 @@ where
 and
 \eqn{ \log L(\hat{\bold{\Psi}}) = \sum_{i =1}^{n} \log L_{i}(\hat{\bold{\Psi}}) = \sum_{i =1}^{n} \log \Bigl\{ \sum_{g=1}^{G} \widehat{\omega_{g}} f_{\bold{Y}}\bigl({\bold{y}}_{i}|\widehat{\bold{\Theta}_{g}}\bigr)\Bigr\}}. Herein \eqn{\widehat{\omega}_g} and \eqn{\widehat{\bold{\Theta}_g}}, for \eqn{g=1,\cdots,G}, denote the ML estimator of \eqn{\omega_g} and \eqn{\bold{\Theta}_g}, respectively.
 }
-
 \usage{sefm(Y, G, weight, model = "restricted", mu, sigma, lambda, family = "constant",
-    skewness = "FALSE", param = NULL, theta = NULL, tick = rep(1, 2), h = 0.001, N = 3000,
+    skewness = "FALSE", param = NULL, theta = NULL, tick = NULL, h = 0.001, N = 3000,
   level = 0.05, PDF = NULL)}
 \arguments{
-\item{Y}{an \eqn{n\times d} matrix of observations. }
+\item{Y}{an \eqn{n\times d} matrix of observations gives the coordinates of the data points. }
 \item{G}{number of components. }
 \item{weight}{a vector of weight parameters (or mixing proportions). }
-\item{model}{one of expressions \code{"canonical"}, \code{"restricted"}, or \code{"unrestricted"}. By default \code{model = "restricted"}. }
+\item{model}{it must be \code{"canonical"}, \code{"restricted"}, or \code{"unrestricted"}. By default \code{model = "restricted".} }
 \item{mu}{a list of location vectors of \code{G} components. }
 \item{sigma}{a list of dispersion matrices of \code{G} components. }
 \item{lambda}{a list of skewness vectors of \code{G} components. If model is either \code{"canonical"} or \code{"unrestricted"}, then skewness vactor must be given in matrix form of appropriate size.}
 \item{family}{name of mixing distribution. By default \code{family = "constant"} that corresponds to the finite mixture of multivariate normal (or skew normal) distribution. Other candidates for family name are: "bs" (for Birnbaum-Saunders), "burriii" (for Burr type iii), "chisq" (for chi-square), "exp" (for exponential), "f" (for Fisher), "gamma" (for gamma), "gig" (for generalized inverse-Gaussian), "igamma" (for inverse-gamma), "igaussian" (for inverse-Gaussian), "lindley" (for Lindley), "loglog" (for log-logistic), "lognorm" (for log-normal), "lomax" (for Lomax), "pstable" (for positive \eqn{\alpha}-stable), "ptstable" (for polynomially tilted \eqn{\alpha}-stable), "rayleigh" (for Rayleigh), and "weibull" (for Weibull). }
-\item{skewness}{logical statement. By default \code{skewness = "FALSE"} which means that a symmetric model is fitted to each component (cluster). If \code{skewness = "TRUE"}, then an asymmetric model is fitted to each component. }
+\item{skewness}{a logical statement. By default \code{skewness = "FALSE"} which means that a symmetric model is fitted to each component (cluster). If \code{skewness = "TRUE"}, then a skewed model is fitted to each component. }
 \item{param}{name of the elements of \eqn{\bold{\theta}} as the parameter vector of mixing distribution with density function \eqn{f_W(w| \bold{\theta})}. By default it is \code{NULL}. }
 \item{PDF}{mathematical expression for mixing density function \eqn{f_W(w| \bold{\theta})}. By default it is \code{NULL}. }
 \item{theta}{a list of maximum likelihood estimator for \eqn{\bold{\theta}} across \code{G} components. By default it is \code{NULL}. }
-\item{tick}{ a binary vector whose length depends on type of family. The elements of \code{tick} are either \code{0} or \code{1}. If element of \code{tick} is \code{0}, then the corresponding element of \eqn{\bold{\theta}} is not considered in the formula of \eqn{f_W(w|{\bold{\theta)}}} for computing the required posterior expectations. If element of \code{tick} is \code{1}, then the corresponding element of \eqn{\bold{\theta}} is considered in the formula of \eqn{f_W(w|{\bold{\theta)}}}. For instance, if \code{family = "gamma"} and either its shape or rate parameter is one, then \code{tick = c(1)}. This is while, if \code{family = "gamma"} and both of the shape and rate parameters are in the formula of \eqn{f_W(w|{\bold{\theta)}}}, then \code{tick = c(1, 1)}. By default \code{tick = rep(1, 2)}.}
+\item{tick}{ a binary vector whose length depends on type of family. The elements of \code{tick} are either \code{0} or \code{1}. If element of \code{tick} is \code{0}, then the corresponding element of \eqn{\bold{\theta}} is not considered in the formula of \eqn{f_W(w|{\bold{\theta)}}} for computing the required posterior expectations. If element of \code{tick} is \code{1}, then the corresponding element of \eqn{\bold{\theta}} is considered in the formula of \eqn{f_W(w|{\bold{\theta)}}}. For instance, if \code{family = "gamma"} and either its shape or rate parameter is one, then \code{tick = c(1)}. This is while, if \code{family = "gamma"} and both of the shape and rate parameters are in the formula of \eqn{f_W(w|{\bold{\theta)}}}, then \code{tick = c(1, 1)}. By default \code{tick = NULL}.}
 \item{h}{a positive small value for computing numerical derivative of \eqn{f_W(w| \bold{\theta})} with respect to \eqn{\bold{\theta}}, that is \eqn{\partial/ \partial \theta f_W(w| \bold{\theta})}. By default \eqn{h = 0.001}. }
 \item{N}{an integer number for approximating the posterior expected values within the E-step of the EM algorithm through the Monte Carlo method. By default \eqn{N = 3000}. }
 \item{level}{significance level \eqn{\alpha} for constructing \eqn{100(1-\alpha)\%} confidence interval. By default \eqn{\alpha = 0.05}. }
@@ -56,7 +55,7 @@ where \eqn{w>0} and \eqn{{{\theta}}=\alpha}. Herein \eqn{\alpha> 0} is the degre
 
 {\code{gamma}}{\deqn{ f_W(w|{\bold{\theta}}) = \frac {\beta^{\alpha}}{\Gamma(\alpha)} \Bigl( \frac{w}{\beta}\Bigr)^{\alpha-1}\exp\bigl\{ - \beta w \bigr\},} where \eqn{w>0} and \eqn{{\bold{\theta}}=(\alpha, \beta)^{\top}}. Herein \eqn{\alpha> 0} and \eqn{\beta> 0} are the shape and rate parameters of this family, respectively.}
 
-{\code{gigaussian}}{\deqn{ f_W(w|{\bold{\theta}}) =\frac{1}{2{\cal{K}}_{\alpha}(\sqrt{\beta \delta})}\Bigl(\frac{\psi}{\alpha}\Bigr)^{\alpha/2}w^{\alpha-1}\exp\biggl\{-\frac{\delta}{2w}-\frac{\beta w}{2}\biggr\},} where \eqn{{\cal{K}}_{\alpha}(.)} denotes the modified Bessel function of the third kind with order index \eqn{\alpha} and \eqn{{\bold{\theta}}=(\alpha, \delta, \beta)^{\top}}. Herein \eqn{-\infty <\alpha <+\infty}, \eqn{\delta> 0}, and \eqn{\beta> 0} are the first, second, and third parameters of this family, respectively.}
+{\code{gigaussian}}{\deqn{ f_W(w|{\bold{\theta}}) =\frac{1}{2{\cal{K}}_{\alpha}(\sqrt{\beta \delta})}\Bigl(\frac{\beta}{\delta}\Bigr)^{\alpha/2}w^{\alpha-1}\exp\biggl\{-\frac{\delta}{2w}-\frac{\beta w}{2}\biggr\},} where \eqn{{\cal{K}}_{\alpha}(.)} denotes the modified Bessel function of the third kind with order index \eqn{\alpha} and \eqn{{\bold{\theta}}=(\alpha, \delta, \beta)^{\top}}. Herein \eqn{-\infty <\alpha <+\infty}, \eqn{\delta> 0}, and \eqn{\beta> 0} are the first, second, and third parameters of this family, respectively.}
 
 {\code{igamma}}{\deqn{ f_W(w|{\bold{\theta}}) = \frac{1}{\Gamma(\alpha)} \Bigl( \frac{w}{\beta}\Bigr)^{-\alpha-1}\exp\Bigl\{ - \frac{\beta}{w} \Bigr\},} where \eqn{w>0} and \eqn{{\bold{\theta}}=(\alpha, \beta)^{\top}}. Herein \eqn{\alpha> 0} and \eqn{\beta> 0} are the shape and scale parameters of this family, respectively.}
 
@@ -91,8 +90,9 @@ C. Tortora, R. P. Browne, A. ElSherbiny, B. C. Franczak, and P. D. McNicholas, (
 \donttest{
 # Example 1: Approximating the asymptotic standard error and 95 percent confidence interval
 #            for the parameters of fitted three-component normal mixture model to iris data.
-      data( iris )
-      Y <- as.matrix( iris[, 1:4] ); colnames(Y) <- NULL; rownames(Y) <- NULL
+      Y <- as.matrix( iris[, 1:4] )
+colnames(Y) <- NULL
+rownames(Y) <- NULL
       G <- 3
  weight <- c( 0.334, 0.300, 0.366         )
     mu1 <- c( 5.0060, 3.428, 1.462, 0.246 )
@@ -106,10 +106,9 @@ C. Tortora, R. P. Browne, A. ElSherbiny, B. C. Franczak, and P. D. McNicholas, (
                       0.334, 0.089, 0.364, 0.087, 0.065, 0.061, 0.087, 0.086 ), nrow = 4 , ncol = 4)
      mu <- list(    mu1,    mu2,    mu3 )
   sigma <- list( sigma1, sigma2, sigma3 )
-     mu <- list(    mu1,    mu2,    mu3 )
   sigma <- list( sigma1, sigma2, sigma3 )
  lambda <- list( rep(0, 4), rep(0, 4), rep(0, 4) )
-    out <- sefm( Y, G, weight, model = "restricted", mu, sigma, lambda, family = "constant",
+   out1 <- sefm( Y, G, weight, model = "restricted", mu, sigma, lambda, family = "constant",
     skewness = "FALSE")
 # Example 2: Approximating the asymptotic standard error and 95 percent confidence interval
 #            for the parameters of fitted two-component restricted skew t mixture model to
@@ -131,9 +130,9 @@ lambda2 <- ( c( 2.1681,  3.5518 ) )
  lambda <- list( lambda1, lambda2 )
   theta <- list(  theta1,  theta2 )
   param <- c( "nu" )
-    PDF <- quote( (nu/2)^(nu/2)*x^(-nu/2 - 1)/gamma(nu/2)*exp( -nu/(x*2) ) )
+    PDF <- quote( (nu/2)^(nu/2)*w^(-nu/2 - 1)/gamma(nu/2)*exp( -nu/(w*2) ) )
   tick  <- c( 1, 1 )
-    out <- sefm( Y, G, weight, model = "restricted", mu, sigma, lambda, family = "igamma",
+   out2 <- sefm( Y, G, weight, model = "restricted", mu, sigma, lambda, family = "igamma",
             skewness = "TRUE", param, theta, tick, h = 0.001, N = 3000, level = 0.05, PDF )
 # Example 3: Approximating the asymptotic standard error and 95 percent confidence interval
 #            for the parameters of fitted two-component restricted skew sub-Gaussian
@@ -156,53 +155,56 @@ lambda2 <- c(  -3.666,  -1.964 )
   theta <- list(  theta1,  theta2 )
   param <- c( "alpha" )
   tick  <- c( 1 )
-    out <- sefm( Y, G, weight, model = "restricted", mu, sigma, lambda, family = "pstable",
+   out3 <- sefm( Y, G, weight, model = "restricted", mu, sigma, lambda, family = "pstable",
             skewness = "TRUE", param, theta, tick, h = 0.01, N = 3000, level = 0.05 )
 # Example 4: Approximating the asymptotic standard error and 95 percent confidence interval
 #            for the parameters of fitted two-component restricted generalized inverse-Gaussian
 #            mixture model to AIS data.
-      data( Wheat )
-      Y <- as.matrix( Wheat[, 1:7] ); colnames(Y) <- NULL; rownames(Y) <- NULL
+      data( wheat )
+      Y <- as.matrix( wheat[, 1:7] ); colnames(Y) <- NULL; rownames(Y) <- NULL
       G <- 3
- weight <- c( 0.400, 0.265, 0.335 )
-    mu1 <- c( 11.546, 13.109, 0.844, 5.186, 2.764, 5.004, 5.224 )
-    mu2 <- c( 18.871, 16.234, 0.901, 6.082, 3.824, 1.627, 6.026 )
-    mu3 <- c( 13.731, 14.033, 0.878, 5.493, 3.141, 0.473, 4.887 )
- sigma1 <- matrix( c( 1.038,  0.458,  0.015,  0.118,  0.170, -0.227,  0.052,
-                      0.458,  0.245,  0.001,  0.085,  0.054, -0.032,  0.063,
-                      0.015,  0.001,  0.007, -0.002,  0.005, -0.012, -0.004,
-                      0.118,  0.085, -0.002,  0.043,  0.003,  0.051,  0.042,
-                      0.170,  0.054,  0.005,  0.003,  0.039, -0.039, -0.009,
-                     -0.227, -0.032, -0.012,  0.051, -0.039,  4.270,  0.151,
-                      0.052,  0.063, -0.004,  0.042, -0.009,  0.151,  0.068 ), nrow = 7, ncol = 7 )
- sigma2 <- matrix( c( 1.287,  0.582, -0.002,  0.239,  0.125,  0.251,  0.209,
-                      0.582,  0.294, -0.004,  0.134,  0.038,  0.057,  0.121,
-                     -0.002, -0.004,  0.006, -0.003,  0.001,  0.005, -0.003,
-                      0.239,  0.134, -0.003,  0.077,  0.007, -0.048,  0.074,
-                      0.125,  0.038,  0.001,  0.007,  0.026,  0.099,  0.000,
-                      0.251,  0.057,  0.005, -0.048,  0.099,  1.922, -0.044,
-                      0.209,  0.121, -0.003,  0.074,  0.000, -0.044,  0.088 ), nrow = 7, ncol = 7 )
- sigma3 <- matrix( c( 1.119,  0.550, -0.000,  0.208,  0.117, -0.477,  0.248,
-                      0.550,  0.298, -0.003,  0.129,  0.041, -0.207,  0.157,
-                     -0.000, -0.003,  0.006, -0.003,  0.001, -0.002, -0.004,
-                      0.208,  0.129, -0.003,  0.071,  0.005, -0.026,  0.086,
-                      0.117,  0.041,  0.001,  0.005,  0.024, -0.075,  0.002,
-                     -0.477, -0.207, -0.002, -0.026, -0.075,  1.474, -0.013,
-                      0.248,  0.157, -0.004,  0.086,  0.002, -0.013,  0.150 ), nrow = 7, ncol = 7 )
-lambda1 <- diag( c( 0.838, 0.335,  0.015, 0.083,  0.214, -1.137, -0.300 ) )
-lambda2 <- diag( c( 0.062, 0.236, -0.025, 0.262, -0.139,  3.355,  0.105 ) )
-lambda3 <- diag( c( 2.235, 1.042,  0.004, 0.228,  0.314,  4.280,  0.664 ) )
- theta1 <- c( 3.943, 4.597 )
- theta2 <- c( 3.448, 4.492 )
- theta3 <- c( 4.337, 6.542 )
-     mu <- list(     mu1,     mu2,     mu3 )
-  sigma <- list(  sigma1,  sigma2,  sigma3 )
- lambda <- list( lambda1, lambda2, lambda3 )
-  theta <- list(  theta1,  theta2,  theta3 )
-  param <- c( "alpha", "beta" )
-    PDF <- quote( 1/( 2*besselK(beta, alpha) )*x^(alpha - 1)*exp( -beta*(1/x + x)/2 ) )
-  tick  <- c( 1, 1, 0 )
-    out2 <- sefm( Y, G, weight, model = "unrestricted", mu, sigma, lambda, family = "gigaussian",
+ weight <- c( 0.325, 0.341, 0.334 )
+    mu1 <- c( 18.8329, 16.2235, 0.9001, 6.0826, 3.8170, 1.6604, 6.0260 )
+    mu2 <- c( 11.5607, 13.1160, 0.8446, 5.1873, 2.7685, 4.9884, 5.2203 )
+    mu3 <- c( 13.8071, 14.0720, 0.8782, 5.5016, 3.1513, 0.6575, 4.9111 )
+lambda1 <- diag( c( 0.1308, 0.2566,-0.0243, 0.2625,-0.1259, 3.3111, 0.1057) )
+lambda2 <- diag( c( 0.7745, 0.3084, 0.0142, 0.0774, 0.1989,-1.0591,-0.2792) )
+lambda3 <- diag( c( 2.0956, 0.9718, 0.0042, 0.2137, 0.2957, 3.9484, 0.6209) )
+ theta1 <- c( -3.3387, 4.2822 )
+ theta2 <- c( -3.6299, 4.5249 )
+ theta3 <- c( -3.9131, 5.8562 )
+ sigma1 <- matrix( c(
+ 1.2936219, 0.5841467,-0.0027135, 0.2395983, 0.1271193, 0.2263583, 0.2105204,
+ 0.5841467, 0.2952009,-0.0045937, 0.1345133, 0.0392849, 0.0486487, 0.1222547,
+-0.0027135,-0.0045937, 0.0003672,-0.0033093, 0.0016788, 0.0056345,-0.0033742,
+ 0.2395983, 0.1345133,-0.0033093, 0.0781141, 0.0069283,-0.0500718, 0.0747912,
+ 0.1271193, 0.0392849, 0.0016788, 0.0069283, 0.0266365, 0.0955757, 0.0002497,
+ 0.2263583, 0.0486487, 0.0056345,-0.0500718, 0.0955757, 1.9202036,-0.0455763,
+ 0.2105204, 0.1222547,-0.0033742, 0.0747912, 0.0002497,-0.0455763, 0.0893237 ), nrow = 7, ncol = 7 )
+ sigma2 <- matrix( c(
+ 0.9969975, 0.4403820, 0.0144607, 0.1139573, 0.1639597,-0.2216050, 0.0499885,
+ 0.4403820, 0.2360065, 0.0010769, 0.0817149, 0.0525057,-0.0320012, 0.0606147,
+ 0.0144607, 0.0010769, 0.0008914,-0.0023864, 0.0049263,-0.0122188,-0.0042375,
+ 0.1139573, 0.0817149,-0.0023864, 0.0416206, 0.0030268, 0.0490919, 0.0407972,
+ 0.1639597, 0.0525057, 0.0049263, 0.0030268, 0.0379771,-0.0384626,-0.0095661,
+-0.2216050,-0.0320012,-0.0122188, 0.0490919,-0.0384626, 4.0868766, 0.1459766,
+ 0.0499885, 0.0606147,-0.0042375, 0.0407972,-0.0095661, 0.1459766, 0.0661900 ), nrow = 7, ncol = 7 )
+ sigma3 <- matrix( c(
+ 1.1245716, 0.5527725,-0.0005064, 0.2083688, 0.1190222,-0.4491047, 0.2494994,
+ 0.5527725, 0.3001219,-0.0036794, 0.1295874, 0.0419470,-0.1926131, 0.1586538,
+-0.0005064,-0.0036794, 0.0004159,-0.0034247, 0.0019652,-0.0026687,-0.0044963,
+ 0.2083688, 0.1295874,-0.0034247, 0.0715283, 0.0055925,-0.0238820, 0.0867129,
+ 0.1190222, 0.0419470, 0.0019652, 0.0055925, 0.0243991,-0.0715797, 0.0026836,
+-0.4491047,-0.1926131,-0.0026687,-0.0238820,-0.0715797, 1.5501246,-0.0048728,
+ 0.2494994, 0.1586538,-0.0044963, 0.0867129, 0.0026836,-0.0048728, 0.1509183 ), nrow = 7, ncol = 7 )
+    mu <- list( mu1, mu2, mu3 )
+ sigma <- list( sigma1 , sigma2, sigma3 )
+lambda <- list( lambda1, lambda2, lambda3 )
+ theta <- list( theta1 , theta2, theta3 )
+  tick <- c( 1, 1, 0 )
+ param <- c( "a", "b" )
+   PDF <- quote( 1/( 2*besselK( b, a ) )*w^(a - 1)*exp( -b/2*(1/w + w) ) )
+  out4 <- sefm( Y, G, weight, model = "unrestricted", mu, sigma, lambda, family = "gigaussian",
             skewness = "TRUE", param, theta, tick, h = 0.001, N = 3000, level = 0.05, PDF )
 }
 }

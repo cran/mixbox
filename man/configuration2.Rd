@@ -3,12 +3,12 @@
 \title{Output configuration.}
 \description{Output design for standard error of the standard error for parameters of the finite mixture models. }
 \usage{configuration2(Y, G, weight, model, mu, sigma, lambda, family, skewness, param,
-theta, ofim2, level)}
+theta, ofim2_solve, sigma_arrange2, level)}
 \arguments{
 \item{Y}{an \eqn{n \times d} matrix of observations. }
-\item{G}{the number of components. }
+\item{G}{number of components. }
 \item{weight}{a vector of weight parameters (or mixing proportions). }
-\item{model}{either \code{"canonical"} or \code{"unrestricted"}. }
+\item{model}{it must be \code{"canonical"} or \code{"unrestricted"}.}
 \item{mu}{a list of location vectors of \code{G} components. }
 \item{sigma}{a list of dispersion matrices of \code{G} components. }
 \item{lambda}{a list of skewness matrices of \code{G} components. If the mixture model is \code{"canonical"}, then lambda is a \eqn{p \times q} matrix.
@@ -17,7 +17,8 @@ If the mixture model is \code{"unrestricted"}, then lambda is a \eqn{p \times p}
 \item{skewness}{logical statement. By default \code{skewness = "TRUE"} which means that a skewed model is fitted to each component (cluster). If \code{skewness = "FALSE"}, then a symmetric model is fitted to each component. }
 \item{param}{name of the elements of \eqn{\bold{\theta}} as the parameter vector of mixing distribution with density function \eqn{f_W(w; \bold{\theta})}. }
 \item{theta}{a list of maximum likelihood estimator for \eqn{\bold{\theta}} across \code{G} components. }
-\item{ofim2}{the observed Fisher information matrix corresponds to the canonical or unrestricted model. }
+\item{ofim2_solve}{inverse of the observed Fisher information matrix corresponds to the canonical or unrestricted model. }
+\item{sigma_arrange2}{orders of the lower triangular elements of the dispersion matrix \eqn{\Sigma}. }
 \item{level}{significance level \eqn{\alpha} for constructing \eqn{100(1-\alpha)\%} confidence interval. By default \eqn{\alpha = 0.05}. }
 }
 \value{ designated form for output of parameters and their standard errors. }
@@ -47,8 +48,8 @@ lambda2 <- diag( c( 5,  5) )
   ofim  <- ofim2(Y[, 1:2], G, weight, model = "unrestricted", mu, sigma, lambda,
   family = "igamma", skewness = "TRUE", param, theta, tick, h = 0.01, N = 3000, level = 0.05, PDF)
 configuration2(Y[, 1:2], G, weight = weight, model = "unrestricted", mu, sigma, lambda,
-family = "igamma", skewness = "TRUE", param, theta, ofim2 = ofim, level = 0.05)
-
+family = "igamma", skewness = "TRUE", param, theta, ofim2_solve = ofim$Fisher,
+sigma_arrange2 = ofim$index_sigma, level = 0.05)
 }
 }
 \keyword{internal}
