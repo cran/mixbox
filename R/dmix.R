@@ -1,4 +1,4 @@
-dmix <- function(Y, G, weight, model = "restricted", mu, sigma, lambda, family = "constant", skewness = "FALSE", param = "NULL", theta = "NULL", tick = NULL, N = 3000, log = FALSE)
+dmix <- function(Y, G, weight, model = "restricted", mu, sigma, lambda, family = "constant", skewness = "FALSE", param = NULL, theta = NULL, tick = NULL, N = 3000, log = "FALSE")
 {
 if( G < 1 | G != round(G) ) stop( "Number of components must be integer." )
   if( G == 1 & length( weight ) > 1 ) stop( "Length of the mixing proportions must be one." )
@@ -239,6 +239,6 @@ if( G < 1 | G != round(G) ) stop( "Number of components must be integer." )
     }
   }
   out <- apply( f_y, 1, sum )
-  if(log == TRUE) out <- log(out)
+  if(log == "TRUE") out <- log(out)
   return( out )
 }

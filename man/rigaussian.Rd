@@ -2,11 +2,11 @@
 \alias{rigaussian}
 \title{Simulating from inversse Gaussian random variable.}
 \description{Using method of Michael and Schucany (1976), we can generate from inversse Gaussian random variable. The density function of an inversse Gaussian distribution is given by
-\deqn{ f_W(w|{\bold{\theta}}) =\sqrt{\frac{\beta}{2 \pi w^3}}\exp\biggl\{-\frac{\beta(w - \mu)^2}{2\mu^2 w}\biggr\},} where \eqn{w>0} and \eqn{{\bold{\theta}}=(\mu, \beta)^{\top}}. Herein \eqn{\mu>0} is the mean and \eqn{\beta> 0} are the first (mean) and second (shape) parameter of this family, respectively.}
+\deqn{ f_W(w\vert{\bold{\theta}}) =\sqrt{\frac{\beta}{2 \pi w^3}}\exp\biggl\{-\frac{\beta(w - \alpha)^2}{2\alpha^2 w}\biggr\},} where \eqn{w>0} and \eqn{{\bold{\theta}}=(\alpha, \beta)^{\top}}. Herein \eqn{\alpha>0} is the mean and \eqn{\beta> 0} are the first (mean) and second (shape) parameter of this family, respectively.}
 \usage{rigaussian(n, alpha, beta)}
 \arguments{
 \item{n}{size of required samples.}
-\item{mu}{tail mean parameter.}
+\item{alpha}{tail mean parameter.}
 \item{beta}{ shape parameter.}
 }
 %\details{}

@@ -1,10 +1,10 @@
-444a2552bbe9ade5be242d8c4e0871b9 *DESCRIPTION
+d181685d9eccd729b367688c3dcc2b51 *DESCRIPTION
 20b281caa7bac0fc6680f0d5b80de092 *NAMESPACE
 1cb9f41b5c484bf80aa6a008410ab2de *R/arrange_lambda.R
 b0348e3d71ccdd833a0e287360cfd491 *R/arrange_sigma.R
 ce1fc22215ee62aa2683a3a7315aae69 *R/configuration1.R
 0fcff8fd00cdf35b8a6394856fc26b48 *R/configuration2.R
-974e5312f8483f161f15cc7e239844de *R/dmix.R
+f0528f9579aef4bb4d51f4e27c065f51 *R/dmix.R
 0c86e55a5f22f0400e0a0034f6f39860 *R/dpstable.R
 4fa27df54c735d97a249bdb08b6779dc *R/dptstable.R
 6db4a1af7f579213e0dad2b99972f2c6 *R/estep1.R
@@ -18,7 +18,7 @@ b2dde98c23ac2e407b77af51b563574e *R/ofim_name.R
 0ba332c9174db66b75d37f6de2d34147 *R/rmvnorm.R
 7cd5b79b8dde62f853795d2c1ee46b7e *R/rptstable.R
 ec916aba91c9dbe668993468537debfc *R/sefm.R
-ecf72564b762aaf70f01b203d202d18c *build/partial.rdb
+32b4f0628accc2d99190369140fb791b *build/partial.rdb
 da8749047e89ef6a33fb5f99d0f9379a *data/AIS.txt.gz
 4f58caa53e106b4f8ecbafd043b6501e *data/bankruptcy.txt.gz
 40470bdabd33397ffb4c133d91f63cb6 *data/wheat.txt.gz
@@ -28,7 +28,7 @@ da8749047e89ef6a33fb5f99d0f9379a *data/AIS.txt.gz
 1ce67f0acb615f8ac22771ead9d20915 *man/bankruptcy.Rd
 9109091131b4d1ad18ff8d4740160a37 *man/configuration1.Rd
 0d8a1da6b94b186bc221269f1333762d *man/configuration2.Rd
-f4a94fa6dd183ebfa76ff6bf484110a0 *man/dmix.Rd
+5dc3687ce7803f78bb856c7126072e38 *man/dmix.Rd
 f85775a4ce315e5a42b1d848996250a6 *man/dpstable.Rd
 7bbce7d5076796db7a1fc3b33305e596 *man/dptstable.Rd
 f5aea4caaefe8eeea5e742ac9f6a7314 *man/estep1.Rd
@@ -36,9 +36,9 @@ e1f02c99025c6068183d159b0d5441ab *man/estep2.Rd
 170bb5e0070fdab9c7cf7468abd09a3a *man/ofim1.Rd
 fb67040a2457ccdbddb1b15ca7524e32 *man/ofim2.Rd
 248555ed0136adb234d87a051bd4e9a8 *man/ofim_name.Rd
-30b457ea626e55bba9ebcdbb0505235d *man/rigaussian.Rd
-cbb234f98ef48b6ea094204b4d8ed27a *man/rmix.Rd
+226f21bb58261d20ecd49990dd9cf56c *man/rigaussian.Rd
+39eb1b536f667adf1699db023482cb30 *man/rmix.Rd
 a719bdac69932a9bf0d9acafdb278381 *man/rmvnorm.Rd
 09250f68790a0011e5d21f1b5a1c1941 *man/rptstable.Rd
-e2138b8f0f7a17c9330429bb3a7ddee7 *man/sefm.Rd
+f969d4e81d28d98590871b257314f055 *man/sefm.Rd
 2367a9509fb140d13aca9b5f5232f9df *man/wheat.Rd

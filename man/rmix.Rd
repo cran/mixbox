@@ -25,7 +25,7 @@ where \eqn{ {\bold{\mu}}_{g} \in {R}^{d} } is location vector, \eqn{ {\bold{\lam
 \item{theta}{a list of maximum likelihood estimator(s) for \eqn{\theta} (parameter vector of mixing distribution) across \code{G} components. By default it is \code{NULL}. }
 }
 %\details{}
-\value{a matrix with \eqn{n} rows and \eqn{d + 1} columns. The first \eqn{d} columns constitute \eqn{n} realizations from random vector \eqn{\bold{Y}=(Y_1,\cdots,Y_d)^{T}} and the last column is the label of realization \eqn{\bold{Y}_i} ( for \eqn{ i = 1, \cdots n} ) indicating the component that \eqn{\bold{Y}_i} is coming from.}
+\value{a matrix with \eqn{n} rows and \eqn{d + 1} columns. The first \eqn{d} columns constitute \eqn{n} realizations from random vector \eqn{\bold{Y}=(Y_1,\cdots,Y_d)^{\top}} and the last column is the label of realization \eqn{\bold{Y}_i} ( for \eqn{ i = 1, \cdots n} ) indicating the component that \eqn{\bold{Y}_i} is coming from.}
 \author{Mahdi Teimouri}
 \examples{
 \donttest{

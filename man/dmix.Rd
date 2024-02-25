@@ -16,7 +16,7 @@ where \eqn{ {\bold{\mu}}_{g} \in {R}^{d} } is location vector, \eqn{ {\bold{\lam
 where \eqn{\bold{\Lambda}_{g}} is the skewness matrix and random vector \eqn{\bold{Z}_0} follows a zero-mean normal random vector truncated to the positive hyperplane \eqn{R^{d}} whose independent marginals have variance unity. We note that in the unrestricted case \eqn{\bold{\Lambda}_{g}} is a \eqn{d \times d} diagonal matrix whereas in the canonical case, it is a \eqn{d\times q} matrix and so, random vector \eqn{\bold{Z}_0} follows a zero-mean normal random vector truncated to the positive hyperplane \eqn{R^{q}}.
 }
 \usage{dmix(Y, G, weight, model = "restricted", mu, sigma, lambda, family = "constant",
-skewness = "FALSE", param = NULL, theta = NULL, tick = NULL, N = 3000, log = FALSE)
+skewness = "FALSE", param = NULL, theta = NULL, tick = NULL, N = 3000, log = "FALSE")
  }
 \arguments{
 \item{Y}{an \eqn{n\times d} matrix of observations. }
@@ -32,7 +32,7 @@ skewness = "FALSE", param = NULL, theta = NULL, tick = NULL, N = 3000, log = FAL
 \item{theta}{a list of maximum likelihood estimator for \eqn{\bold{\theta}} (parameter vector of the mixing distribution with density function \eqn{f_W(w| \bold{\theta})}), across \code{G} components. By default it is \code{NULL}. }
 \item{tick}{ a binary vector whose length depends on type of family. The elements of \code{tick} are either \code{0} or \code{1}. If element of \code{tick} is \code{0}, then the corresponding element of \eqn{\bold{\theta}} is not considered in the formula of \eqn{f_W(w|{\bold{\theta)}}} for computing the required posterior expectations. If element of \code{tick} is \code{1}, then the corresponding element of \eqn{\bold{\theta}} is considered in the formula of \eqn{f_W(w|{\bold{\theta)}}}. For instance, if \code{family = "gamma"} and either its shape or rate parameter is one, then \code{tick = c(1)}. This is while, if \code{family = "gamma"} and both of the shape and rate parameters are in the formula of \eqn{f_W(w|{\bold{\theta)}}}, then \code{tick = c(1, 1)}. By default \code{tick = NULL}.}
 \item{N}{an integer number for approximating the \eqn{ g({\bold{y}}|\Psi) }. By default \eqn{N = 3000}. }
-\item{log}{if \code{log = TRUE}, then it returns the log of the density function. By default it is \code{log = FALSE}.}
+\item{log}{if \code{log = "TRUE"}, then it returns the log of the density function. By default it is \code{log = "FALSE"}.}
 }
 %\details{}
 \value{Monte Carlo approximated values of mixture model density function.}
@@ -52,7 +52,7 @@ lambda2 <- c(-5,  5 )
   sigma <- list( sigma1 , sigma2 )
  lambda <- list( lambda1, lambda2)
     out <- dmix(Y, G, weight, model = "restricted", mu, sigma, lambda, family =
-           "constant", skewness = "TRUE", param = "NULL", theta = "NULL", tick =
+           "constant", skewness = "TRUE", param = NULL, theta = NULL, tick =
            NULL, N = 3000)
 }
 }
